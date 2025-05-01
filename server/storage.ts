@@ -110,6 +110,8 @@ export class MemStorage implements IStorage {
       zohoAlias: userData.zohoAlias || `${userData.username}-${id}@example.com`,
       role: userData.role || "user",
       plan: "free",
+      stripeCustomerId: null,
+      stripeSubscriptionId: null,
       createdAt: now
     };
     this.users.set(id, user);
@@ -146,8 +148,8 @@ export class MemStorage implements IStorage {
       .filter(newsletter => newsletter.userId === userId)
       .sort((a, b) => {
         // Sort by received date, newest first
-        const dateA = new Date(a.receivedAt).getTime();
-        const dateB = new Date(b.receivedAt).getTime();
+        const dateA = a.receivedAt ? new Date(a.receivedAt).getTime() : 0;
+        const dateB = b.receivedAt ? new Date(b.receivedAt).getTime() : 0;
         return dateB - dateA;
       });
   }
@@ -189,8 +191,8 @@ export class MemStorage implements IStorage {
       .filter(summary => summary.newsletterId === newsletterId)
       .sort((a, b) => {
         // Sort by created date, newest first
-        const dateA = new Date(a.createdAt).getTime();
-        const dateB = new Date(b.createdAt).getTime();
+        const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
         return dateB - dateA;
       });
   }
@@ -218,6 +220,7 @@ export class MemStorage implements IStorage {
     const currentYear = new Date().getFullYear();
     
     return Array.from(this.summaries.values()).filter(summary => {
+      if (!summary.createdAt) return false;
       const summaryDate = new Date(summary.createdAt);
       return summary.userId === userId && 
              summaryDate.getMonth() === currentMonth &&
@@ -330,9 +333,9 @@ export class MemStorage implements IStorage {
           avatarColor: 'bg-blue-500'
         },
         action: 'New Subscription',
-        plan: users[0].plan.charAt(0).toUpperCase() + users[0].plan.slice(1),
+        plan: users[0].plan ? users[0].plan.charAt(0).toUpperCase() + users[0].plan.slice(1) : 'Free',
         date: new Date().toISOString(),
-        amount: users[0].plan === 'pro' ? 9 : users[0].plan === 'business' ? 19 : 0
+        amount: (users[0].plan || '') === 'pro' ? 9 : (users[0].plan || '') === 'business' ? 19 : 0
       });
     }
     
@@ -449,7 +452,9 @@ export class DatabaseStorage implements IStorage {
       ...userData,
       zohoAlias: userData.zohoAlias || `${userData.username}@example.com`,
       role: userData.role || "user",
-      plan: "free"
+      plan: "free",
+      stripeCustomerId: null,
+      stripeSubscriptionId: null
     }).returning();
     return user;
   }
@@ -725,8 +730,8 @@ export class DatabaseStorage implements IStorage {
           avatarColor: `bg-${['blue', 'green', 'purple', 'yellow', 'red'][i % 5]}-500`
         },
         action: 'New User',
-        plan: user.plan.charAt(0).toUpperCase() + user.plan.slice(1),
-        date: user.createdAt.toISOString(),
+        plan: user.plan ? user.plan.charAt(0).toUpperCase() + user.plan.slice(1) : 'Free',
+        date: user.createdAt ? user.createdAt.toISOString() : new Date().toISOString(),
         amount: 0
       });
     }
@@ -744,9 +749,9 @@ export class DatabaseStorage implements IStorage {
           avatarColor: `bg-${['blue', 'green', 'purple', 'yellow', 'red'][(i + 2) % 5]}-500`
         },
         action: subscription.status === 'active' ? 'New Subscription' : 'Subscription Cancellation',
-        plan: subscription.plan.charAt(0).toUpperCase() + subscription.plan.slice(1),
-        date: subscription.createdAt.toISOString(),
-        amount: subscription.plan === 'pro' ? 9 : subscription.plan === 'business' ? 19 : 0
+        plan: subscription.plan ? subscription.plan.charAt(0).toUpperCase() + subscription.plan.slice(1) : 'Free',
+        date: subscription.createdAt ? subscription.createdAt.toISOString() : new Date().toISOString(),
+        amount: (subscription.plan || '') === 'pro' ? 9 : (subscription.plan || '') === 'business' ? 19 : 0
       });
     }
     
