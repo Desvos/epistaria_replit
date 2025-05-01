@@ -3,49 +3,65 @@
 @tailwind utilities;
 
 :root {
-      --background: 0 0% 100%;
---foreground: 20 14.3% 4.1%;
---muted: 60 4.8% 95.9%;
---muted-foreground: 25 5.3% 44.7%;
---popover: 0 0% 100%;
---popover-foreground: 20 14.3% 4.1%;
---card: 0 0% 100%;
---card-foreground: 20 14.3% 4.1%;
---border: 20 5.9% 90%;
---input: 20 5.9% 90%;
---primary: 207 90% 54%;
---primary-foreground: 211 100% 99%;
---secondary: 60 4.8% 95.9%;
---secondary-foreground: 24 9.8% 10%;
---accent: 60 4.8% 95.9%;
---accent-foreground: 24 9.8% 10%;
---destructive: 0 84.2% 60.2%;
---destructive-foreground: 60 9.1% 97.8%;
---ring: 20 14.3% 4.1%;
---radius: 0.5rem;
-  }
-  .dark {
-      --background: 240 10% 3.9%;
---foreground: 0 0% 98%;
---muted: 240 3.7% 15.9%;
---muted-foreground: 240 5% 64.9%;
---popover: 240 10% 3.9%;
---popover-foreground: 0 0% 98%;
---card: 240 10% 3.9%;
---card-foreground: 0 0% 98%;
---border: 240 3.7% 15.9%;
---input: 240 3.7% 15.9%;
---primary: 207 90% 54%;
---primary-foreground: 211 100% 99%;
---secondary: 240 3.7% 15.9%;
---secondary-foreground: 0 0% 98%;
---accent: 240 3.7% 15.9%;
---accent-foreground: 0 0% 98%;
---destructive: 0 62.8% 30.6%;
---destructive-foreground: 0 0% 98%;
---ring: 240 4.9% 83.9%;
---radius: 0.5rem;
-  }
+  /* Base theme */
+  --background: 0 0% 100%;
+  --foreground: 20 14.3% 4.1%;
+  --muted: 60 4.8% 95.9%;
+  --muted-foreground: 25 5.3% 44.7%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 20 14.3% 4.1%;
+  --card: 0 0% 100%;
+  --card-foreground: 20 14.3% 4.1%;
+  --border: 20 5.9% 90%;
+  --input: 20 5.9% 90%;
+  --primary: 207 90% 54%;
+  --primary-foreground: 211 100% 99%;
+  --secondary: 60 4.8% 95.9%;
+  --secondary-foreground: 24 9.8% 10%;
+  --accent: 60 4.8% 95.9%;
+  --accent-foreground: 24 9.8% 10%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 60 9.1% 97.8%;
+  --ring: 20 14.3% 4.1%;
+  --radius: 0.5rem;
+  
+  /* Custom light theme colors */
+  --light-bg: 0 0% 96%;
+  --light-card: 0 0% 100%;
+  --text-light: 0 0% 10%; 
+  --text-secondary-light: 0 0% 45%;
+  --light-hover: 0 0% 94%;
+}
+
+.dark {
+  /* Base theme */
+  --background: 220 13% 18%; /* VS Code-style dark background */
+  --foreground: 220 14% 96%;
+  --muted: 220 10% 25%;
+  --muted-foreground: 220 10% 65%;
+  --popover: 220 13% 18%;
+  --popover-foreground: 220 14% 96%;
+  --card: 220 13% 23%; /* VS Code-style panel background */
+  --card-foreground: 220 14% 96%;
+  --border: 215 10% 25%;
+  --input: 215 10% 25%;
+  --primary: 207 90% 54%;
+  --primary-foreground: 211 100% 99%;
+  --secondary: 215 10% 22%;
+  --secondary-foreground: 0 0% 98%;
+  --accent: 215 10% 22%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --ring: 215 10% 65%;
+  
+  /* Custom dark theme colors - using VS Code dark theme palette */
+  --dark-bg: 220 13% 18%; /* #1e1e1e equivalent - VS Code main bg */
+  --dark-card: 220 13% 23%; /* #252526 equivalent - VS Code sidebar */
+  --text-dark: 220 14% 96%;
+  --text-secondary-dark: 220 10% 70%;
+  --dark-hover: 220 13% 26%; /* #2d2d30 equivalent - VS Code hover state */
+}
 
 @layer base {
   * {
