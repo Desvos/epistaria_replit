@@ -1,6 +1,7 @@
 import { pgTable, text, serial, integer, boolean, timestamp, jsonb } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
+import { relations } from "drizzle-orm";
 
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
@@ -18,7 +19,7 @@ export const users = pgTable("users", {
 
 export const newsletters = pgTable("newsletters", {
   id: serial("id").primaryKey(),
-  userId: integer("user_id").notNull(),
+  userId: integer("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   from: text("from").notNull(),
   subject: text("subject").notNull(),
   content: text("content").notNull(),
@@ -32,8 +33,8 @@ export const newsletters = pgTable("newsletters", {
 
 export const summaries = pgTable("summaries", {
   id: serial("id").primaryKey(),
-  userId: integer("user_id").notNull(),
-  newsletterId: integer("newsletter_id").notNull(),
+  userId: integer("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  newsletterId: integer("newsletter_id").notNull().references(() => newsletters.id, { onDelete: "cascade" }),
   type: text("type").notNull(), // 'bullet_points', 'main_keys', 'executive', 'action_items', 'custom'
   content: text("content").notNull(),
   customParams: jsonb("custom_params"),
@@ -42,7 +43,7 @@ export const summaries = pgTable("summaries", {
 
 export const subscriptions = pgTable("subscriptions", {
   id: serial("id").primaryKey(),
-  userId: integer("user_id").notNull(),
+  userId: integer("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   plan: text("plan").notNull(), // 'free', 'pro', 'business'
   status: text("status").notNull(), // 'active', 'canceled', 'past_due'
   currentPeriodEnd: timestamp("current_period_end"),
@@ -99,3 +100,36 @@ export type Subscription = typeof subscriptions.$inferSelect;
 export type InsertSubscription = z.infer<typeof insertSubscriptionSchema>;
 export type LoginData = z.infer<typeof loginSchema>;
 export type SummaryRequest = z.infer<typeof summaryRequestSchema>;
+
+// Define relations
+export const usersRelations = relations(users, ({ many }) => ({
+  newsletters: many(newsletters),
+  summaries: many(summaries),
+  subscriptions: many(subscriptions),
+}));
+
+export const newslettersRelations = relations(newsletters, ({ one, many }) => ({
+  user: one(users, {
+    fields: [newsletters.userId],
+    references: [users.id],
+  }),
+  summaries: many(summaries),
+}));
+
+export const summariesRelations = relations(summaries, ({ one }) => ({
+  user: one(users, {
+    fields: [summaries.userId],
+    references: [users.id],
+  }),
+  newsletter: one(newsletters, {
+    fields: [summaries.newsletterId],
+    references: [newsletters.id],
+  }),
+}));
+
+export const subscriptionsRelations = relations(subscriptions, ({ one }) => ({
+  user: one(users, {
+    fields: [subscriptions.userId],
+    references: [users.id],
+  }),
+}));
