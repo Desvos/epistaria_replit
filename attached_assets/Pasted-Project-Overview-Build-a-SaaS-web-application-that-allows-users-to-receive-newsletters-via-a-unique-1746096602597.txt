@@ -1,0 +1,48 @@
+Project Overview:
+Build a SaaS web application that allows users to receive newsletters via a unique Zoho Mail alias. Each user is assigned a Zoho Mail alias to subscribe to newsletters. When an email is received, a server-side job saves the email content to a MongoDB database. Users can log in to a Gmail-style interface to read, manage, and summarize their newsletters using ChatGPT-powered summaries.
+
+Key Features:
+
+Landing Page (/):
+Explains the app’s value proposition and features.
+Allows users to select a subscription plan.
+Integrates Stripe for secure payment processing.
+Frontoffice (/app):
+User authentication (login/signup).
+Gmail-style inbox UI for reading and managing received newsletters.
+Option to switch between dark and light themes.
+Ability to request AI-generated summaries of emails (using ChatGPT API), with summary types such as:
+Bullet points
+Main keys
+Executive summary
+Action items
+Custom summary (user-defined parameters)
+User account management (password, profile).
+Subscription management (view, upgrade, cancel plan).
+Backoffice (/admin):
+Admin authentication (login).
+Dashboard to monitor subscription metrics (number of users, active subscriptions, etc.).
+Technical Stack:
+
+Frontend: React.js with Ant Design for UI components, following best practices for UX/UI.
+Backend: Node.js/Express.js (or similar) for API and server-side logic.
+Database: MongoDB for storing user data and emails.
+Email Integration: Zoho Mail API for receiving and processing emails via aliases.
+Payments: Stripe API for subscription management.
+AI Summaries: OpenAI/ChatGPT API for generating email summaries.
+Requirements:
+
+All routes (/, /app, /admin) must be implemented in React.js with Ant Design.
+Clean, modular codebase with clear separation of concerns.
+Responsive design for desktop and mobile.
+Secure authentication and authorization for both users and admin.
+Server-side job (cron or webhook) to process incoming emails and save them to MongoDB.
+Stripe integration for handling payments and subscription lifecycle.
+Admin dashboard with basic analytics.
+Well-documented code and clear README.
+Deliverables:
+
+Complete source code for frontend and backend.
+Instructions for local setup and deployment.
+Example .env file for environment variables (Zoho, Stripe, MongoDB, OpenAI keys, etc.).
+Sample data for testing.
