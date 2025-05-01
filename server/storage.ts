@@ -11,7 +11,7 @@ const MemoryStore = createMemoryStore(session);
 
 // Interface for all storage operations
 export interface IStorage {
-  sessionStore: session.SessionStore;
+  sessionStore: session.Store;
   
   // User operations
   getUser(id: number): Promise<User | undefined>;
@@ -58,7 +58,7 @@ export class MemStorage implements IStorage {
   private newsletters: Map<number, Newsletter>;
   private summaries: Map<number, Summary>;
   private subscriptionsMap: Map<number, Subscription>;
-  sessionStore: session.SessionStore;
+  sessionStore: session.Store;
   currentId: { [key: string]: number };
 
   constructor() {
@@ -409,7 +409,7 @@ export class MemStorage implements IStorage {
 }
 
 export class DatabaseStorage implements IStorage {
-  sessionStore: session.SessionStore;
+  sessionStore: session.Store;
 
   constructor() {
     this.sessionStore = new PostgresSessionStore({ 
